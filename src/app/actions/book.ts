@@ -1,49 +1,30 @@
-import { Action } from '@ngrx/store';
-import { Book } from '../models/book';
+import {Book} from '../models/book';
+import {ActionEnum, ActionEnumValue} from './action-enum';
 
-export const SEARCH =           '[Book] Search';
-export const SEARCH_COMPLETE =  '[Book] Search Complete';
-export const LOAD =             '[Book] Load';
-export const SELECT =           '[Book] Select';
-
+export class BookAction<T> extends ActionEnumValue<T> {
+  constructor(name: string) {
+    super(name);
+  }
+}
 
 /**
  * Every action is comprised of at least a type and an optional
  * payload. Expressing actions as classes enables powerful
- * type checking in reducer functions.
- *
- * See Discriminated Unions: https://www.typescriptlang.org/docs/handbook/advanced-types.html#discriminated-unions
+ * type checking in reducer functions. Enums simplify generating
+ * the classes.
  */
-export class SearchAction implements Action {
-  readonly type = SEARCH;
+export class BookActionEnumType extends ActionEnum<BookAction<any>> {
 
-  constructor(public payload: string) { }
+  SEARCH: BookAction<string> = new BookAction<string>('[Book] Search');
+  SEARCH_COMPLETE: BookAction<Book[]> = new BookAction<Book[]>('[Book] Search Complete');
+  LOAD: BookAction<Book> = new BookAction<Book>('[Book] Load');
+  SELECT: BookAction<string> = new BookAction<string>('[Book] Select');
+
+  constructor() {
+    super();
+    this.initEnum('bookActions');
+  }
 }
 
-export class SearchCompleteAction implements Action {
-  readonly type = SEARCH_COMPLETE;
+export const BookActionEnum: BookActionEnumType = new BookActionEnumType();
 
-  constructor(public payload: Book[]) { }
-}
-
-export class LoadAction implements Action {
-  readonly type = LOAD;
-
-  constructor(public payload: Book) { }
-}
-
-export class SelectAction implements Action {
-  readonly type = SELECT;
-
-  constructor(public payload: string) { }
-}
-
-/**
- * Export a type alias of all actions in this action group
- * so that reducers can easily compose action types
- */
-export type Actions
-  = SearchAction
-  | SearchCompleteAction
-  | LoadAction
-  | SelectAction;

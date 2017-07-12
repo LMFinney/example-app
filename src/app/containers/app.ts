@@ -1,10 +1,10 @@
 import 'rxjs/add/operator/let';
-import { Observable } from 'rxjs/Observable';
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '@ngrx/store';
+import {Observable} from 'rxjs/Observable';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {Store} from '@ngrx/store';
 
 import * as fromRoot from '../reducers';
-import * as layout from '../actions/layout';
+import {LayoutActionEnum} from '../actions/layout';
 
 
 @Component({
@@ -46,10 +46,10 @@ export class AppComponent {
      * updates and user interaction through the life of our
      * application.
      */
-    this.store.dispatch(new layout.CloseSidenavAction());
+    this.store.dispatch(LayoutActionEnum.CLOSE_SIDENAV.toAction());
   }
 
   openSidenav() {
-    this.store.dispatch(new layout.OpenSidenavAction());
+    this.store.dispatch(LayoutActionEnum.OPEN_SIDENAV.toAction());
   }
 }

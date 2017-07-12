@@ -1,11 +1,18 @@
-import * as book from '../actions/book';
+import {BookActionEnum} from '../actions/book';
+import {Book} from '../models/book';
+import {ActionEnumValue, TypedAction} from '../actions/action-enum';
+import {
+  ReducerEnum,
+  ReducerEnumValue,
+  ReducerFunction
+} from './reducer-enum';
 
 
 export interface State {
   ids: string[];
   loading: boolean;
   query: string;
-};
+}
 
 const initialState: State = {
   ids: [],
@@ -13,41 +20,49 @@ const initialState: State = {
   query: ''
 };
 
-export function reducer(state = initialState, action: book.Actions): State {
-  switch (action.type) {
-    case book.SEARCH: {
-      const query = action.payload;
-
-      if (query === '') {
-        return {
-          ids: [],
-          loading: false,
-          query
-        };
-      }
-
-      return Object.assign({}, state, {
-        query,
-        loading: true
-      });
-    }
-
-    case book.SEARCH_COMPLETE: {
-      const books = action.payload;
-
-      return {
-        ids: books.map(book => book.id),
-        loading: false,
-        query: state.query
-      };
-    }
-
-    default: {
-      return state;
-    }
+export class SearchReducer<T> extends ReducerEnumValue<State, T> {
+  constructor(action: ActionEnumValue<T>, reduce: ReducerFunction<State, T>) {
+    super(action, reduce);
   }
 }
 
+export class SearchReducerEnumType extends ReducerEnum<SearchReducer<any>, State> {
+
+  SEARCH: SearchReducer<string> =
+    new SearchReducer<string>(BookActionEnum.SEARCH,
+      (state: State, action: TypedAction<string>): State => {
+        const query = action.payload;
+
+        if (query === '') {
+          return {
+            ids: [],
+            loading: false,
+            query
+          };
+        }
+
+        return Object.assign({}, state, {
+          query,
+          loading: true
+        });
+      });
+  SEARCH_COMPLETE: SearchReducer<Book[]> =
+    new SearchReducer<Book[]>(BookActionEnum.SEARCH_COMPLETE,
+      (state: State, action: TypedAction<Book[]>): State => {
+        return {
+          ids: action.payload.map((book: Book) => book.id),
+          loading: false,
+          query: state.query
+        };
+      });
+
+  constructor() {
+    super(initialState);
+    this.initEnum('searchReducers');
+  }
+}
+
+export const SearchReducerEnum: SearchReducerEnumType = new SearchReducerEnumType();
 
 export const getIds = (state: State) => state.ids;
 

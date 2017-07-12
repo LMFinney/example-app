@@ -1,24 +1,23 @@
-import { reducer } from './books';
 import * as fromBooks from './books';
-import { SearchCompleteAction, LoadAction, SelectAction } from '../actions/book';
-import { Book } from '../models/book';
-import { LoadSuccessAction } from '../actions/collection';
+import {BooksReducerEnum} from './books';
+import {Book} from '../models/book';
+import {BookAction, BookActionEnum} from '../actions/book';
 
 describe('BooksReducer', () => {
   describe('undefined action', () => {
     it('should return the default state', () => {
       const action = {} as any;
 
-      const result = reducer(undefined, action);
+      const result = BooksReducerEnum.reducer()(undefined, action);
       expect(result).toEqual(fromBooks.initialState);
     });
   });
 
   describe('SEARCH_COMPLETE & LOAD_SUCCESS', () => {
-    function noExistingBooks(action) {
+    function noExistingBooks(actionEnum: BookAction<Book[]>) {
       const book1 = {id: '111'} as Book;
       const book2 = {id: '222'} as Book;
-      const createAction = new action([book1, book2]);
+      const createAction = actionEnum.toAction([book1, book2]);
 
       const expectedResult = {
         ids: ['111', '222'],
@@ -27,13 +26,13 @@ describe('BooksReducer', () => {
           '222': book2
         },
         selectedBookId: null,
-      };
+      } as fromBooks.State;
 
-      const result = reducer(fromBooks.initialState, createAction);
+      const result = BooksReducerEnum.reducer()(fromBooks.initialState, createAction);
       expect(result).toEqual(expectedResult);
     }
 
-    function existingBooks(action) {
+    function existingBooks(actionEnum: BookAction<Book[]>) {
       const book1 = {id: '111'} as Book;
       const book2 = {id: '222'} as Book;
       const initialState = {
@@ -47,7 +46,7 @@ describe('BooksReducer', () => {
       // should not replace existing books
       const differentBook2 = {id: '222', foo: 'bar'} as any;
       const book3 = {id: '333'} as Book;
-      const createAction = new action([book3, differentBook2]);
+      const createAction = actionEnum.toAction([book3, differentBook2]);
 
       const expectedResult = {
         ids: ['111', '222', '333'],
@@ -57,27 +56,27 @@ describe('BooksReducer', () => {
           '333': book3
         },
         selectedBookId: null,
-      };
+      } as fromBooks.State;
 
-      const result = reducer(initialState, createAction);
+      const result = BooksReducerEnum.reducer()(initialState, createAction);
       expect(result).toEqual(expectedResult);
     }
 
     it('should add all books in the payload when none exist', () => {
-      noExistingBooks(SearchCompleteAction);
-      noExistingBooks(LoadSuccessAction);
+      noExistingBooks(BookActionEnum.SEARCH_COMPLETE);
+      noExistingBooks(BookActionEnum.LOAD);
     });
 
     it('should add only new books when books already exist', () => {
-      existingBooks(SearchCompleteAction);
-      existingBooks(LoadSuccessAction);
+      existingBooks(BookActionEnum.SEARCH_COMPLETE);
+      existingBooks(BookActionEnum.LOAD);
     });
   });
 
   describe('LOAD', () => {
     it('should add a single book, if the book does not exist', () => {
       const book = {id: '888'} as Book;
-      const action = new LoadAction(book);
+      const action = BookActionEnum.LOAD.toAction(book);
 
       const expectedResult = {
         ids: ['888'],
@@ -85,9 +84,9 @@ describe('BooksReducer', () => {
           '888': book
         },
         selectedBookId: null
-      };
+      } as fromBooks.State;
 
-      const result = reducer(fromBooks.initialState, action);
+      const result = BooksReducerEnum.reducer()(fromBooks.initialState, action);
       expect(result).toEqual(expectedResult);
     });
 
@@ -99,18 +98,18 @@ describe('BooksReducer', () => {
         }
       } as any;
       const book = {id: '999', foo: 'baz'} as any;
-      const action = new LoadAction(book);
+      const action = BookActionEnum.LOAD.toAction(book);
 
-      const result = reducer(initialState, action);
+      const result = BooksReducerEnum.reducer()(initialState, action);
       expect(result).toEqual(initialState);
     });
   });
 
   describe('SELECT', () => {
     it('should set the selected book id on the state', () => {
-      const action = new SelectAction('1');
+      const action = BookActionEnum.SELECT.toAction('1');
 
-      const result = reducer(fromBooks.initialState, action);
+      const result = BooksReducerEnum.reducer()(fromBooks.initialState, action);
       expect(result.selectedBookId).toBe('1');
     });
   });

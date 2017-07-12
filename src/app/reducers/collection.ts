@@ -1,11 +1,18 @@
-import * as collection from '../actions/collection';
+import {CollectionActionEnum} from '../actions/collection';
+import {Book} from '../models/book';
+import {ActionEnumValue, TypedAction} from '../actions/action-enum';
+import {
+  ReducerEnum,
+  ReducerEnumValue,
+  ReducerFunction
+} from './reducer-enum';
 
 
 export interface State {
   loaded: boolean;
   loading: boolean;
   ids: string[];
-};
+}
 
 const initialState: State = {
   loaded: false,
@@ -13,52 +20,61 @@ const initialState: State = {
   ids: []
 };
 
-export function reducer(state = initialState, action: collection.Actions): State {
-  switch (action.type) {
-    case collection.LOAD: {
-      return Object.assign({}, state, {
-        loading: true
-      });
-    }
-
-    case collection.LOAD_SUCCESS: {
-      const books = action.payload;
-
-      return {
-        loaded: true,
-        loading: false,
-        ids: books.map(book => book.id)
-      };
-    }
-
-    case collection.ADD_BOOK_SUCCESS:
-    case collection.REMOVE_BOOK_FAIL: {
-      const book = action.payload;
-
-      if (state.ids.indexOf(book.id) > -1) {
-        return state;
-      }
-
-      return Object.assign({}, state, {
-        ids: [ ...state.ids, book.id ]
-      });
-    }
-
-    case collection.REMOVE_BOOK_SUCCESS:
-    case collection.ADD_BOOK_FAIL: {
-      const book = action.payload;
-
-      return Object.assign({}, state, {
-        ids: state.ids.filter(id => id !== book.id)
-      });
-    }
-
-    default: {
-      return state;
-    }
+export class CollectionReducer<T> extends ReducerEnumValue<State, T> {
+  constructor(action: ActionEnumValue<T> | ActionEnumValue<T>[],
+              reduce: ReducerFunction<State, T>) {
+    super(action, reduce);
   }
 }
 
+export class CollectionReducerEnumType extends ReducerEnum<CollectionReducer<any>, State> {
+
+  LOAD: CollectionReducer<void> =
+    new CollectionReducer<void>(CollectionActionEnum.LOAD,
+      (state: State) => ({...state, loading: true}));
+  LOAD_SUCCESS: CollectionReducer<Book[]> =
+    new CollectionReducer<Book[]>(CollectionActionEnum.LOAD_SUCCESS,
+      (state: State, action: TypedAction<Book[]>) => {
+        return {
+          loaded: true,
+          loading: false,
+          ids: action.payload.map((book: Book) => book.id)
+        };
+      });
+  ADD_BOOK_SUCCESS: CollectionReducer<Book> =
+    new CollectionReducer<Book>(
+      [CollectionActionEnum.ADD_BOOK_SUCCESS,
+        CollectionActionEnum.REMOVE_BOOK_FAIL],
+      (state: State, action: TypedAction<Book>) => {
+        const book = action.payload;
+
+        if (state.ids.indexOf(book.id) > -1) {
+          return state;
+        }
+
+        return Object.assign({}, state, {
+          ids: [ ...state.ids, book.id ]
+        });
+      });
+  REMOVE_BOOK_SUCCESS: CollectionReducer<Book> =
+    new CollectionReducer<Book>(
+      [CollectionActionEnum.REMOVE_BOOK_SUCCESS,
+        CollectionActionEnum.ADD_BOOK_FAIL],
+      (state: State, action: TypedAction<Book>) => {
+        const book = action.payload;
+
+        return Object.assign({}, state, {
+          ids: state.ids.filter(id => id !== book.id)
+        });
+      });
+
+  constructor() {
+    super(initialState);
+    this.initEnum('collectionReducers');
+  }
+}
+
+export const CollectionReducerEnum: CollectionReducerEnumType = new CollectionReducerEnumType();
 
 export const getLoaded = (state: State) => state.loaded;
 

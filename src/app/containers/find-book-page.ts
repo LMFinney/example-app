@@ -1,12 +1,12 @@
 import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/take';
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs/Observable';
 
 import * as fromRoot from '../reducers';
-import * as book from '../actions/book';
-import { Book } from '../models/book';
+import {BookActionEnum} from '../actions/book';
+import {Book} from '../models/book';
 
 
 @Component({
@@ -29,6 +29,6 @@ export class FindBookPageComponent {
   }
 
   search(query: string) {
-    this.store.dispatch(new book.SearchAction(query));
+    this.store.dispatch(BookActionEnum.SEARCH.toAction(query));
   }
 }

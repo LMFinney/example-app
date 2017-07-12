@@ -5,15 +5,17 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/let';
-import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Router, CanActivate, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import {Injectable} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
+import {Observable} from 'rxjs/Observable';
+import {of} from 'rxjs/observable/of';
 
-import { GoogleBooksService } from '../services/google-books';
+import {GoogleBooksService} from '../services/google-books';
 import * as fromRoot from '../reducers';
-import * as book from '../actions/book';
+import {BookActionEnum} from '../actions/book';
+import {Book} from '../models/book';
+import {TypedAction} from '../actions/action-enum';
 
 
 /**
@@ -56,8 +58,8 @@ export class BookExistsGuard implements CanActivate {
    */
   hasBookInApi(id: string): Observable<boolean> {
     return this.googleBooks.retrieveBook(id)
-      .map(bookEntity => new book.LoadAction(bookEntity))
-      .do((action: book.LoadAction) => this.store.dispatch(action))
+      .map(bookEntity => BookActionEnum.LOAD.toAction(bookEntity))
+      .do((action: TypedAction<Book>) => this.store.dispatch(action))
       .map(book => !!book)
       .catch(() => {
         this.router.navigate(['/404']);

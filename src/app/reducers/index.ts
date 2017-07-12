@@ -1,8 +1,7 @@
-import { createSelector } from 'reselect';
+import {createSelector} from 'reselect';
 import { ActionReducer } from '@ngrx/store';
 import * as fromRouter from '@ngrx/router-store';
-import { environment } from '../../environments/environment';
-
+import {environment} from '../../environments/environment';
 /**
  * The compose function is one of our most handy tools. In basic terms, you give
  * it any number of functions and it returns a function. This new function
@@ -11,14 +10,13 @@ import { environment } from '../../environments/environment';
  *
  * More: https://drboolean.gitbooks.io/mostly-adequate-guide/content/ch5.html
  */
-import { compose } from '@ngrx/core/compose';
-
+import {compose} from '@ngrx/core/compose';
 /**
  * storeFreeze prevents state from being mutated. When mutation occurs, an
  * exception will be thrown. This is useful during development mode to
  * ensure that none of the reducers accidentally mutates the state.
  */
-import { storeFreeze } from 'ngrx-store-freeze';
+import {storeFreeze} from 'ngrx-store-freeze';
 
 /**
  * combineReducers is another useful metareducer that takes a map of reducer
@@ -64,10 +62,10 @@ export interface State {
  * the result from right to left.
  */
 const reducers = {
-  search: fromSearch.reducer,
-  books: fromBooks.reducer,
-  collection: fromCollection.reducer,
-  layout: fromLayout.reducer,
+  search: fromSearch.SearchReducerEnum.reducer(),
+  books: fromBooks.BooksReducerEnum.reducer(),
+  collection: fromCollection.CollectionReducerEnum.reducer(),
+  layout: fromLayout.LayoutReducerEnum.reducer(),
   router: fromRouter.routerReducer,
 };
 

@@ -1,12 +1,13 @@
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
-import { EffectsTestingModule, EffectsRunner } from '@ngrx/effects/testing';
-import { TestBed } from '@angular/core/testing';
-import { CollectionEffects } from './collection';
-import { Database } from '@ngrx/db';
-import { Book } from '../models/book';
-import * as collection from '../actions/collection';
-import { Observable } from 'rxjs/Observable';
+import {Action} from '@ngrx/store';
+import {EffectsRunner, EffectsTestingModule} from '@ngrx/effects/testing';
+import {TestBed} from '@angular/core/testing';
+import {CollectionEffects} from './collection';
+import {Database} from '@ngrx/db';
+import {Book} from '../models/book';
+import {CollectionActionEnum} from '../actions/collection';
+import {Observable} from 'rxjs/Observable';
 
 describe('CollectionEffects', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -48,11 +49,11 @@ describe('CollectionEffects', () => {
       const booksObservable = Observable.of(book1, book2);
       db.query.and.returnValue(booksObservable);
 
-      const expectedResult = new collection.LoadSuccessAction([book1, book2]);
+      const expectedResult = CollectionActionEnum.LOAD_SUCCESS.toAction([book1, book2]);
 
-      runner.queue(new collection.LoadAction());
+      runner.queue(CollectionActionEnum.LOAD.toAction());
 
-      collectionEffects.loadCollection$.subscribe(result => {
+      collectionEffects.loadCollection$.subscribe((result: Action) => {
         expect(result).toEqual(expectedResult);
       });
     });
@@ -63,11 +64,11 @@ describe('CollectionEffects', () => {
       const error = new Error('msg');
       db.query.and.returnValue(Observable.throw(error));
 
-      const expectedResult = new collection.LoadFailAction(error);
+      const expectedResult = CollectionActionEnum.LOAD_FAIL.toAction(error);
 
-      runner.queue(new collection.LoadAction());
+      runner.queue(CollectionActionEnum.LOAD.toAction());
 
-      collectionEffects.loadCollection$.subscribe(result => {
+      collectionEffects.loadCollection$.subscribe((result: Action) => {
         expect(result).toEqual(expectedResult);
       });
     });
@@ -80,11 +81,11 @@ describe('CollectionEffects', () => {
       const {db, runner, collectionEffects} = setup();
       db.insert.and.returnValue(Observable.of({}));
 
-      const expectedResult = new collection.AddBookSuccessAction(book);
+      const expectedResult = CollectionActionEnum.ADD_BOOK_SUCCESS.toAction(book);
 
-      runner.queue(new collection.AddBookAction(book));
+      runner.queue(CollectionActionEnum.ADD_BOOK.toAction(book));
 
-      collectionEffects.addBookToCollection$.subscribe(result => {
+      collectionEffects.addBookToCollection$.subscribe((result: Action) => {
         expect(result).toEqual(expectedResult);
         expect(db.insert).toHaveBeenCalledWith('books', [book]);
       });
@@ -96,11 +97,11 @@ describe('CollectionEffects', () => {
       const {db, runner, collectionEffects} = setup();
       db.insert.and.returnValue(Observable.throw(new Error()));
 
-      const expectedResult = new collection.AddBookFailAction(book);
+      const expectedResult = CollectionActionEnum.ADD_BOOK_FAIL.toAction(book);
 
-      runner.queue(new collection.AddBookAction(book));
+      runner.queue(CollectionActionEnum.ADD_BOOK.toAction(book));
 
-      collectionEffects.addBookToCollection$.subscribe(result => {
+      collectionEffects.addBookToCollection$.subscribe((result: Action) => {
         expect(result).toEqual(expectedResult);
         expect(db.insert).toHaveBeenCalledWith('books', [book]);
       });
@@ -113,11 +114,11 @@ describe('CollectionEffects', () => {
         const {db, runner, collectionEffects} = setup();
         db.executeWrite.and.returnValue(Observable.of({}));
 
-        const expectedResult = new collection.RemoveBookSuccessAction(book);
+        const expectedResult = CollectionActionEnum.REMOVE_BOOK_SUCCESS.toAction(book);
 
-        runner.queue(new collection.RemoveBookAction(book));
+        runner.queue(CollectionActionEnum.REMOVE_BOOK.toAction(book));
 
-        collectionEffects.removeBookFromCollection$.subscribe(result => {
+        collectionEffects.removeBookFromCollection$.subscribe((result: Action) => {
           expect(result).toEqual(expectedResult);
           expect(db.executeWrite).toHaveBeenCalledWith('books', 'delete', ['111']);
         });
@@ -129,11 +130,11 @@ describe('CollectionEffects', () => {
         const {db, runner, collectionEffects} = setup();
         db.executeWrite.and.returnValue(Observable.throw(new Error()));
 
-        const expectedResult = new collection.RemoveBookFailAction(book);
+        const expectedResult = CollectionActionEnum.REMOVE_BOOK_FAIL.toAction(book);
 
-        runner.queue(new collection.RemoveBookAction(book));
+        runner.queue(CollectionActionEnum.REMOVE_BOOK.toAction(book));
 
-        collectionEffects.removeBookFromCollection$.subscribe(result => {
+        collectionEffects.removeBookFromCollection$.subscribe((result: Action) => {
           expect(result).toEqual(expectedResult);
           expect(db.executeWrite).toHaveBeenCalledWith('books', 'delete', ['111']);
         });

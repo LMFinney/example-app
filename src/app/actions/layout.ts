@@ -1,18 +1,20 @@
-import { Action } from '@ngrx/store';
+import {ActionEnum, ActionEnumValue} from './action-enum';
 
-export const OPEN_SIDENAV =   '[Layout] Open Sidenav';
-export const CLOSE_SIDENAV =  '[Layout] Close Sidenav';
-
-
-export class OpenSidenavAction implements Action {
-  readonly type = OPEN_SIDENAV;
+export class LayoutAction<T> extends ActionEnumValue<T> {
+  constructor(name: string) {
+    super(name);
+  }
 }
 
-export class CloseSidenavAction implements Action {
-  readonly type = CLOSE_SIDENAV;
+export class LayoutActionEnumType extends ActionEnum<LayoutAction<any>> {
+
+  OPEN_SIDENAV: LayoutAction<void> = new LayoutAction<void>('[Layout] Open Sidenav');
+  CLOSE_SIDENAV: LayoutAction<void> = new LayoutAction<void>('[Layout] Close Sidenav');
+
+  constructor() {
+    super();
+    this.initEnum('layoutActions');
+  }
 }
 
-
-export type Actions
-  = OpenSidenavAction
-  | CloseSidenavAction;
+export const LayoutActionEnum: LayoutActionEnumType = new LayoutActionEnumType();

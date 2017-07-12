@@ -1,12 +1,13 @@
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
-import { EffectsTestingModule, EffectsRunner } from '@ngrx/effects/testing';
-import { TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { BookEffects } from './book';
-import { GoogleBooksService } from '../services/google-books';
-import { Observable } from 'rxjs/Observable';
-import { SearchAction, SearchCompleteAction } from '../actions/book';
-import { Book } from '../models/book';
+import {Action} from '@ngrx/store';
+import {EffectsRunner, EffectsTestingModule} from '@ngrx/effects/testing';
+import {fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {BookEffects} from './book';
+import {GoogleBooksService} from '../services/google-books';
+import {Observable} from 'rxjs/Observable';
+import {BookActionEnum} from '../actions/book';
+import {Book} from '../models/book';
 
 describe('BookEffects', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -42,11 +43,11 @@ describe('BookEffects', () => {
 
       const {runner, bookEffects} = setup({searchBooksReturnValue: Observable.of(books)});
 
-      const expectedResult = new SearchCompleteAction(books);
-      runner.queue(new SearchAction('query'));
+      const expectedResult = BookActionEnum.SEARCH_COMPLETE.toAction(books);
+      runner.queue(BookActionEnum.SEARCH.toAction('query'));
 
       let result = null;
-      bookEffects.search$.subscribe(_result => result = _result);
+      bookEffects.search$.subscribe((_result: Action) => result = _result);
       tick(299); // test de-bounce
       expect(result).toBe(null);
       tick(300);
@@ -56,11 +57,11 @@ describe('BookEffects', () => {
     it('should return a new book.SearchCompleteAction, with an empty array, if the books service throws', fakeAsync(() => {
       const {runner, bookEffects} = setup({searchBooksReturnValue: Observable.throw(new Error())});
 
-      const expectedResult = new SearchCompleteAction([]);
-      runner.queue(new SearchAction('query'));
+      const expectedResult = BookActionEnum.SEARCH_COMPLETE.toAction([]);
+      runner.queue(BookActionEnum.SEARCH.toAction('query'));
 
       let result = null;
-      bookEffects.search$.subscribe(_result => result = _result);
+      bookEffects.search$.subscribe((_result: Action) => result = _result);
       tick(299); // test de-bounce
       expect(result).toBe(null);
       tick(300);
@@ -70,7 +71,7 @@ describe('BookEffects', () => {
     it(`should not do anything if the query is an empty string`, fakeAsync(() => {
       const {runner, bookEffects} = setup();
 
-      runner.queue(new SearchAction(''));
+      runner.queue(BookActionEnum.SEARCH.toAction(''));
       let result = null;
       bookEffects.search$.subscribe({
         next: () => result = false,

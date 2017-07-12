@@ -1,88 +1,46 @@
-import { Action } from '@ngrx/store';
-import { Book } from '../models/book';
+import {Book} from '../models/book';
+import {ActionEnum, ActionEnumValue} from './action-enum';
 
-
-export const ADD_BOOK =             '[Collection] Add Book';
-export const ADD_BOOK_SUCCESS =     '[Collection] Add Book Success';
-export const ADD_BOOK_FAIL =        '[Collection] Add Book Fail';
-export const REMOVE_BOOK =          '[Collection] Remove Book';
-export const REMOVE_BOOK_SUCCESS =  '[Collection] Remove Book Success';
-export const REMOVE_BOOK_FAIL =     '[Collection] Remove Book Fail';
-export const LOAD =                 '[Collection] Load';
-export const LOAD_SUCCESS =         '[Collection] Load Success';
-export const LOAD_FAIL =            '[Collection] Load Fail';
-
-
-/**
- * Add Book to Collection Actions
- */
-export class AddBookAction implements Action {
-  readonly type = ADD_BOOK;
-
-  constructor(public payload: Book) { }
+export class CollectionAction<T> extends ActionEnumValue<T> {
+  constructor(name: string) {
+    super(name);
+  }
 }
 
-export class AddBookSuccessAction implements Action {
-  readonly type = ADD_BOOK_SUCCESS;
+export class CollectionActionEnumType extends ActionEnum<CollectionAction<any>> {
+  /**
+   * Add Book to Collection Actions
+   */
+  ADD_BOOK: CollectionAction<Book> =
+    new CollectionAction<Book>('[Collection] Add Book');
+  ADD_BOOK_SUCCESS: CollectionAction<Book> =
+    new CollectionAction<Book>('[Collection] Add Book Success');
+  ADD_BOOK_FAIL: CollectionAction<Book> =
+    new CollectionAction<Book>('[Collection] Add Book Fail');
+  /**
+   * Remove Book from Collection Actions
+   */
+  REMOVE_BOOK: CollectionAction<Book> =
+    new CollectionAction<Book>('[Collection] Remove Book');
+  REMOVE_BOOK_SUCCESS: CollectionAction<Book> =
+    new CollectionAction<Book>('[Collection] Remove Book Success');
+  REMOVE_BOOK_FAIL: CollectionAction<Book> =
+    new CollectionAction<Book>('[Collection] Remove Book Fail');
+  /**
+   * Load Collection Actions
+   */
+  LOAD: CollectionAction<void> =
+    new CollectionAction<void>('[Collection] Load');
+  LOAD_SUCCESS: CollectionAction<Book[]> =
+    new CollectionAction<Book[]>('[Collection] Load Success');
+  LOAD_FAIL: CollectionAction<any> =
+    new CollectionAction<any>('[Collection] Load Fail');
 
-  constructor(public payload: Book) { }
+  constructor() {
+    super();
+    this.initEnum('collectionActions');
+  }
 }
 
-export class AddBookFailAction implements Action {
-  readonly type = ADD_BOOK_FAIL;
-
-  constructor(public payload: Book) { }
-}
-
-
-/**
- * Remove Book from Collection Actions
- */
-export class RemoveBookAction implements Action {
-  readonly type = REMOVE_BOOK;
-
-  constructor(public payload: Book) { }
-}
-
-export class RemoveBookSuccessAction implements Action {
-  readonly type = REMOVE_BOOK_SUCCESS;
-
-  constructor(public payload: Book) { }
-}
-
-export class RemoveBookFailAction implements Action {
-  readonly type = REMOVE_BOOK_FAIL;
-
-  constructor(public payload: Book) {}
-}
-
-/**
- * Load Collection Actions
- */
-export class LoadAction implements Action {
-  readonly type = LOAD;
-}
-
-export class LoadSuccessAction implements Action {
-  readonly type = LOAD_SUCCESS;
-
-  constructor(public payload: Book[]) { }
-}
-
-export class LoadFailAction implements Action {
-  readonly type = LOAD_FAIL;
-
-  constructor(public payload: any) { }
-}
-
-
-export type Actions
-  = AddBookAction
-  | AddBookSuccessAction
-  | AddBookFailAction
-  | RemoveBookAction
-  | RemoveBookSuccessAction
-  | RemoveBookFailAction
-  | LoadAction
-  | LoadSuccessAction
-  | LoadFailAction;
+export const CollectionActionEnum: CollectionActionEnumType =
+  new CollectionActionEnumType();
