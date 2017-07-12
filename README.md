@@ -7,7 +7,11 @@ large switch statements in the reducers. This is a fork of the [example app](htt
 that uses [ts-enums](https://github.com/LMFinney/ts-enums) to encapsulate the actions and 
 reducers, thereby reducing boilerplate and hiding the switch statement from view.
 
-Built with [@angular/cli](https://github.com/angular/angular-cli)
+Built with [@angular/cli](https://github.com/angular/angular-cli).
+
+If you want to use the base action and reducer enums, you can get them from 
+[ngrx-enums](https://github.com/LMFinney/ngrx-enums), where they have been 
+extracted from this project with slight modifications.
 
 ### Details
 Because the actions are used throughout the app, there are changes from the original example
