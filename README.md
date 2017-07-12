@@ -106,7 +106,7 @@ export const BookActionEnum: BookActionEnumType = new BookActionEnumType();
 ```
 
 #### Reducer Example
-The enum approach eliminates the big switch statement by storing the action types in 
+The enum approach eliminates the big switch statement by storing the action instances in 
 [reducer-enum.ts](src/app/reducers/reducer-enum.ts).
 
 [Before](https://github.com/ngrx/example-app/blob/d7547f282cd3f22a1ec9e03f07e27365d5242bdb/src/app/reducers/collection.ts):
