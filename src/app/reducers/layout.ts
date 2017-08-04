@@ -1,10 +1,11 @@
 import {LayoutActionEnum} from '../actions/layout';
-import {ActionEnumValue} from '../actions/action-enum';
+import {ActionEnumValue, TypedAction} from '../actions/action-enum';
 import {
   ReducerEnum,
   ReducerEnumValue,
   ReducerFunction
 } from './reducer-enum';
+import {ActionReducer} from '@ngrx/store';
 
 
 export interface State {
@@ -37,5 +38,10 @@ export class LayoutReducerEnumType extends ReducerEnum<LayoutReducer<any>, State
 }
 
 export const LayoutReducerEnum: LayoutReducerEnumType = new LayoutReducerEnumType();
+const reducer: ActionReducer<State> = LayoutReducerEnum.reducer();
+
+export function layoutReducer(state: State, action: TypedAction<any>): State {
+  return reducer(state, action);
+}
 
 export const getShowSidenav = (state: State) => state.showSidenav;

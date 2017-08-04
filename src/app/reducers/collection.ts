@@ -6,6 +6,7 @@ import {
   ReducerEnumValue,
   ReducerFunction
 } from './reducer-enum';
+import {ActionReducer} from '@ngrx/store';
 
 
 export interface State {
@@ -75,6 +76,11 @@ export class CollectionReducerEnumType extends ReducerEnum<CollectionReducer<any
 }
 
 export const CollectionReducerEnum: CollectionReducerEnumType = new CollectionReducerEnumType();
+const reducer: ActionReducer<State> = CollectionReducerEnum.reducer();
+
+export function collectionReducer(state: State, action: TypedAction<any>): State {
+  return reducer(state, action);
+}
 
 export const getLoaded = (state: State) => state.loaded;
 

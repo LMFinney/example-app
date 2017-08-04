@@ -62,10 +62,10 @@ export interface State {
  * the result from right to left.
  */
 const reducers = {
-  search: fromSearch.SearchReducerEnum.reducer(),
-  books: fromBooks.BooksReducerEnum.reducer(),
-  collection: fromCollection.CollectionReducerEnum.reducer(),
-  layout: fromLayout.LayoutReducerEnum.reducer(),
+  search: fromSearch.searchReducer,
+  books: fromBooks.booksReducer,
+  collection: fromCollection.collectionReducer,
+  layout: fromLayout.layoutReducer,
   router: fromRouter.routerReducer,
 };
 

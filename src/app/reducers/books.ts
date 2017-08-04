@@ -8,6 +8,7 @@ import {
   ReducerEnumValue,
   ReducerFunction
 } from './reducer-enum';
+import {ActionReducer} from '@ngrx/store';
 
 
 export interface State {
@@ -85,6 +86,11 @@ export class BooksReducerEnumType extends ReducerEnum<BooksReducer<any>, State> 
 }
 
 export const BooksReducerEnum: BooksReducerEnumType = new BooksReducerEnumType();
+const reducer: ActionReducer<State> = BooksReducerEnum.reducer();
+
+export function booksReducer(state: State, action: TypedAction<any>): State {
+  return reducer(state, action);
+}
 
 /**
  * Because the data structure is defined within the reducer it is optimal to

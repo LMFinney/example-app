@@ -6,6 +6,7 @@ import {
   ReducerEnumValue,
   ReducerFunction
 } from './reducer-enum';
+import {ActionReducer} from '@ngrx/store';
 
 
 export interface State {
@@ -63,6 +64,11 @@ export class SearchReducerEnumType extends ReducerEnum<SearchReducer<any>, State
 }
 
 export const SearchReducerEnum: SearchReducerEnumType = new SearchReducerEnumType();
+const reducer: ActionReducer<State> = SearchReducerEnum.reducer();
+
+export function searchReducer(state: State, action: TypedAction<any>): State {
+  return reducer(state, action);
+}
 
 export const getIds = (state: State) => state.ids;
 
