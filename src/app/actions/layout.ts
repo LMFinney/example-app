@@ -8,8 +8,8 @@ export class LayoutAction<T> extends ActionEnumValue<T> {
 
 export class LayoutActionEnumType extends ActionEnum<LayoutAction<any>> {
 
-  OPEN_SIDENAV: LayoutAction<void> = new LayoutAction<void>('[Layout] Open Sidenav');
-  CLOSE_SIDENAV: LayoutAction<void> = new LayoutAction<void>('[Layout] Close Sidenav');
+  OPEN_SIDENAV = new LayoutAction<void>('[Layout] Open Sidenav');
+  CLOSE_SIDENAV = new LayoutAction<void>('[Layout] Close Sidenav');
 
   constructor() {
     super();
@@ -17,4 +17,4 @@ export class LayoutActionEnumType extends ActionEnum<LayoutAction<any>> {
   }
 }
 
-export const LayoutActionEnum: LayoutActionEnumType = new LayoutActionEnumType();
+export const LayoutActionEnum = new LayoutActionEnumType();

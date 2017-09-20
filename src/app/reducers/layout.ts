@@ -24,11 +24,9 @@ export class LayoutReducer<T> extends ReducerEnumValue<State, T> {
 
 export class LayoutReducerEnumType extends ReducerEnum<LayoutReducer<any>, State> {
 
-  CLOSE_SIDENAV: LayoutReducer<void> =
-    new LayoutReducer<void>(LayoutActionEnum.CLOSE_SIDENAV,
+  CLOSE_SIDENAV = new LayoutReducer<void>(LayoutActionEnum.CLOSE_SIDENAV,
       (state: State) => ({showSidenav: false}));
-  OPEN_SIDENAV: LayoutReducer<void> =
-    new LayoutReducer<void>(LayoutActionEnum.OPEN_SIDENAV,
+  OPEN_SIDENAV = new LayoutReducer<void>(LayoutActionEnum.OPEN_SIDENAV,
       (state: State) => ({showSidenav: true}));
 
   constructor() {
@@ -37,7 +35,7 @@ export class LayoutReducerEnumType extends ReducerEnum<LayoutReducer<any>, State
   }
 }
 
-export const LayoutReducerEnum: LayoutReducerEnumType = new LayoutReducerEnumType();
+export const LayoutReducerEnum = new LayoutReducerEnumType();
 const reducer: ActionReducer<State> = LayoutReducerEnum.reducer();
 
 export function layoutReducer(state: State, action: TypedAction<any>): State {

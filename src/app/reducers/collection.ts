@@ -30,11 +30,9 @@ export class CollectionReducer<T> extends ReducerEnumValue<State, T> {
 
 export class CollectionReducerEnumType extends ReducerEnum<CollectionReducer<any>, State> {
 
-  LOAD: CollectionReducer<void> =
-    new CollectionReducer<void>(CollectionActionEnum.LOAD,
+  LOAD = new CollectionReducer<void>(CollectionActionEnum.LOAD,
       (state: State) => ({...state, loading: true}));
-  LOAD_SUCCESS: CollectionReducer<Book[]> =
-    new CollectionReducer<Book[]>(CollectionActionEnum.LOAD_SUCCESS,
+  LOAD_SUCCESS = new CollectionReducer<Book[]>(CollectionActionEnum.LOAD_SUCCESS,
       (state: State, action: TypedAction<Book[]>) => {
         return {
           loaded: true,
@@ -42,8 +40,7 @@ export class CollectionReducerEnumType extends ReducerEnum<CollectionReducer<any
           ids: action.payload.map((book: Book) => book.id)
         };
       });
-  ADD_BOOK_SUCCESS: CollectionReducer<Book> =
-    new CollectionReducer<Book>(
+  ADD_BOOK_SUCCESS = new CollectionReducer<Book>(
       [CollectionActionEnum.ADD_BOOK_SUCCESS,
         CollectionActionEnum.REMOVE_BOOK_FAIL],
       (state: State, action: TypedAction<Book>) => {
@@ -57,8 +54,7 @@ export class CollectionReducerEnumType extends ReducerEnum<CollectionReducer<any
           ids: [ ...state.ids, book.id ]
         });
       });
-  REMOVE_BOOK_SUCCESS: CollectionReducer<Book> =
-    new CollectionReducer<Book>(
+  REMOVE_BOOK_SUCCESS = new CollectionReducer<Book>(
       [CollectionActionEnum.REMOVE_BOOK_SUCCESS,
         CollectionActionEnum.ADD_BOOK_FAIL],
       (state: State, action: TypedAction<Book>) => {
@@ -75,7 +71,7 @@ export class CollectionReducerEnumType extends ReducerEnum<CollectionReducer<any
   }
 }
 
-export const CollectionReducerEnum: CollectionReducerEnumType = new CollectionReducerEnumType();
+export const CollectionReducerEnum = new CollectionReducerEnumType();
 const reducer: ActionReducer<State> = CollectionReducerEnum.reducer();
 
 export function collectionReducer(state: State, action: TypedAction<any>): State {

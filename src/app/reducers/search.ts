@@ -29,8 +29,7 @@ export class SearchReducer<T> extends ReducerEnumValue<State, T> {
 
 export class SearchReducerEnumType extends ReducerEnum<SearchReducer<any>, State> {
 
-  SEARCH: SearchReducer<string> =
-    new SearchReducer<string>(BookActionEnum.SEARCH,
+  SEARCH = new SearchReducer<string>(BookActionEnum.SEARCH,
       (state: State, action: TypedAction<string>): State => {
         const query = action.payload;
 
@@ -47,8 +46,7 @@ export class SearchReducerEnumType extends ReducerEnum<SearchReducer<any>, State
           loading: true
         });
       });
-  SEARCH_COMPLETE: SearchReducer<Book[]> =
-    new SearchReducer<Book[]>(BookActionEnum.SEARCH_COMPLETE,
+  SEARCH_COMPLETE = new SearchReducer<Book[]>(BookActionEnum.SEARCH_COMPLETE,
       (state: State, action: TypedAction<Book[]>): State => {
         return {
           ids: action.payload.map((book: Book) => book.id),
@@ -63,7 +61,7 @@ export class SearchReducerEnumType extends ReducerEnum<SearchReducer<any>, State
   }
 }
 
-export const SearchReducerEnum: SearchReducerEnumType = new SearchReducerEnumType();
+export const SearchReducerEnum = new SearchReducerEnumType();
 const reducer: ActionReducer<State> = SearchReducerEnum.reducer();
 
 export function searchReducer(state: State, action: TypedAction<any>): State {

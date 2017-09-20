@@ -15,10 +15,10 @@ export class BookAction<T> extends ActionEnumValue<T> {
  */
 export class BookActionEnumType extends ActionEnum<BookAction<any>> {
 
-  SEARCH: BookAction<string> = new BookAction<string>('[Book] Search');
-  SEARCH_COMPLETE: BookAction<Book[]> = new BookAction<Book[]>('[Book] Search Complete');
-  LOAD: BookAction<Book> = new BookAction<Book>('[Book] Load');
-  SELECT: BookAction<string> = new BookAction<string>('[Book] Select');
+  SEARCH = new BookAction<string>('[Book] Search');
+  SEARCH_COMPLETE = new BookAction<Book[]>('[Book] Search Complete');
+  LOAD = new BookAction<Book>('[Book] Load');
+  SELECT = new BookAction<string>('[Book] Select');
 
   constructor() {
     super();
@@ -26,5 +26,5 @@ export class BookActionEnumType extends ActionEnum<BookAction<any>> {
   }
 }
 
-export const BookActionEnum: BookActionEnumType = new BookActionEnumType();
+export const BookActionEnum = new BookActionEnumType();
 

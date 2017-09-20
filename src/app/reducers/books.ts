@@ -32,8 +32,7 @@ export class BooksReducer<T> extends ReducerEnumValue<State, T> {
 
 export class BooksReducerEnumType extends ReducerEnum<BooksReducer<any>, State> {
 
-  SEARCH_COMPLETE: BooksReducer<Book[]> =
-    new BooksReducer<Book[]>(
+  SEARCH_COMPLETE = new BooksReducer<Book[]>(
       [BookActionEnum.SEARCH_COMPLETE, CollectionActionEnum.LOAD_SUCCESS],
       (state: State, action: TypedAction<Book[]>) => {
         const books = action.payload;
@@ -52,8 +51,7 @@ export class BooksReducerEnumType extends ReducerEnum<BooksReducer<any>, State> 
           selectedBookId: state.selectedBookId
         };
       });
-  LOAD: BooksReducer<Book> =
-    new BooksReducer<Book>(BookActionEnum.LOAD,
+  LOAD = new BooksReducer<Book>(BookActionEnum.LOAD,
       (state: State, action: TypedAction<Book>) => {
         const book = action.payload;
 
@@ -69,8 +67,7 @@ export class BooksReducerEnumType extends ReducerEnum<BooksReducer<any>, State> 
           selectedBookId: state.selectedBookId
         };
       });
-  SELECT: BooksReducer<string> =
-    new BooksReducer<string>(BookActionEnum.SELECT,
+  SELECT = new BooksReducer<string>(BookActionEnum.SELECT,
       (state: State, action: TypedAction<string>) => {
         return {
           ids: state.ids,
@@ -85,7 +82,7 @@ export class BooksReducerEnumType extends ReducerEnum<BooksReducer<any>, State> 
   }
 }
 
-export const BooksReducerEnum: BooksReducerEnumType = new BooksReducerEnumType();
+export const BooksReducerEnum = new BooksReducerEnumType();
 const reducer: ActionReducer<State> = BooksReducerEnum.reducer();
 
 export function booksReducer(state: State, action: TypedAction<any>): State {
